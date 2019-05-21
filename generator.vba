@@ -1,6 +1,6 @@
 Sub genkomb()
 
-n = 3
+n = 4
 m = 2
 
 z = Silnia(n)
@@ -8,12 +8,11 @@ x = Ikombezpow(z, n, m)
 
 MsgBox "ilość kombinacji: " & x
 
-v = GLKBP(n, m, 2)
+v = GLKBP(n, m, x)
 
 
 
 End Sub
-
 'Funkcja obliczająca silnie
 Function Silnia(wielkosczbioru)
 
@@ -49,10 +48,10 @@ Function GLKBP(wielkosczbioru, wielkoscpodzbioru, k)
 
 Dim tmp(20, 1000) 'pamieć już wylosowanych kombinacji
 Dim podzbior(20) 'podzbior przechowujący wygenerowaną losowo kombinacje bez powtorzeń
-Dim i, j, z, x As Integer 'liczniki pętli
+Dim i, j, z, x, e As Integer 'liczniki pętli
 Dim zmp As Integer 'wylosowana pojedyncza liczba w zakresie od 1 do wielkosczbioru
 Dim powtorka As Integer 'zmienna odpowiedzialna za losowanie podzbioru, tak długo az to będzie właściwa z punktu widzenia matematycznego kombinacja wielkoscpodzbioru elementowa bez powtórzeń ze zbioru wielkosczbioru elementowego
-Dim potorka2 As Integer 'powtarzanie generowania kombinacji bez powtórzeń, tak długo aż bedzie się powtarzać. Celem zbioru jest uzyskanie nie wygenerowanej wcześniej kombinacji bez powtórzeń
+Dim powtorka2 As Integer 'powtarzanie generowania kombinacji bez powtórzeń, tak długo aż bedzie się powtarzać. Celem zbioru jest uzyskanie nie wygenerowanej wcześniej kombinacji bez powtórzeń
 Dim ilosc As Integer 'zmienna odpowiedzialna za wylosowanie tylko wielkoscpodzbioru elementów do podzbioru podzbior
 Dim przecinek As Integer 'czy wypisywac przecinek
 Dim wynik As String
@@ -92,7 +91,8 @@ For j = 1 To k
             Do While ilosc < wielkoscpodzbioru
             
                 powtorka = 0
-                zmp = Rnd Mod wielkosczbioru + 1
+                Randomize
+                zmp = 1 + Round(Rnd * (wielkosczbioru - 1), 1)
                 
                 For z = 1 To wielkoscpodzbioru
                 
@@ -100,7 +100,7 @@ For j = 1 To k
                     
                     powtorka = 1
                     
-                    Exit Do
+                    Exit For
                     
                     End If
                 
@@ -114,9 +114,7 @@ For j = 1 To k
                 End If
         
             Loop
-        
-        
-        
+                
         'sprawdzenie czy ta kombinacja bez powtorzen była już wczesniej wylosowana i jak tak to powtórka losowania
         powtorka2 = 1
         
@@ -124,7 +122,7 @@ For j = 1 To k
         
             If tmp(0, i - 1) = 0 Then
             
-            Exit For
+            Exit Do
             
             End If
             
@@ -138,7 +136,6 @@ For j = 1 To k
                     End If
                     
                     powtorka2 = 1
-                    
                 
                 Next x
                 
@@ -148,9 +145,8 @@ For j = 1 To k
                 
                 End If
             
-            
             Next z
-            
+         
             If powtorka2 = 0 Then
             
                 For e = 1 To wielkoscpodzbioru
@@ -163,8 +159,10 @@ For j = 1 To k
                 Exit For
             End If
             
+           
+         
+         Next i
         
-        Next i
         
    Loop
         
@@ -176,7 +174,6 @@ For j = 1 To k
         przecinek = przecinek + 1
         
         If przecinek = wielkoscpodzbioru Then
-            
             MsgBox wynik
             wynik = ""
         End If
